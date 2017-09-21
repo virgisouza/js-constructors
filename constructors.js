@@ -54,11 +54,15 @@ function Spell (name, cost, description) {
  * @property {string} description
  */
 function DamageSpell (name, cost, damage, description) {
-   Spell.call(this, name, cost, description);
+   Spell.call(this, name, cost, description); //Super in ES6
       this.damage = damage;
 };
 
-DamageSpell.prototype = Object.create(Spell.prototype);
+DamageSpell.prototype = Object.create(Spell.prototype, {
+   constructor : DamageSpell
+});
+
+
 
 /**
  * Now that you've created some spells, let's create
@@ -85,11 +89,13 @@ function Spellcaster (name, health, mana) {
 };
 
 Spellcaster.prototype.inflictDamage = function (damage) {
-      if(this.health > 0){
-         this.health -= damage;
-      }else if(this.health === 0){
-         this.isAlive = false;
-      }
+   // if(this.health <= damage)...
+
+   //    if(this.health > 0){
+   //       this.health -= damage;
+   //    }else if(this.health === 0){
+   //       this.isAlive = false;
+   //    }
 };
 
   /**
@@ -102,7 +108,9 @@ Spellcaster.prototype.inflictDamage = function (damage) {
    *
    * @param  {number} damage  Amount of damage to deal to the spellcaster
    */
+   Spellcaster.prototype.spendMana = function () {
 
+   };
   /**
    * @method spendMana
    *
@@ -139,11 +147,16 @@ Spellcaster.prototype.inflictDamage = function (damage) {
    * @param  {Spellcaster} target         The spell target to be inflicted.
    * @return {boolean}                    Whether the spell was successfully cast.
    */
-// Spellcaster.prototype.invoke = function (spell, target) {
-//    if(spell){
-//       if(spell instanceof Spell){
-//          if()
-//       }
-//    }
-// }
+Spellcaster.prototype.invoke = function (spell, target) {
+   if (!(spell instanceof Spell)) return false;
+   if (spell.cost > this.mana) return false;
 
+   if(spell instanceof DamageSpell) {
+      if(target && target instanceof Spellcaster) {
+         target.inflictDamage(spell.damage);
+         return this.spendMana(spell.cost);
+      }
+      return false;
+   }
+   return this.spendMana(spell.cost);
+}
