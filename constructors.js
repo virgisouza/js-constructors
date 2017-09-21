@@ -82,12 +82,16 @@ function Spellcaster (name, health, mana) {
    this.health = health;
    this.mana = mana;
    this.isAlive = true;
-
 };
 
-Spellcaster.prototype.inflictDamage = function (number) {
-   Spellcaster.call(this, name, health, mana);
+Spellcaster.prototype.inflictDamage = function (damage) {
+      if(this.health > 0){
+         this.health -= damage;
+      }else if(this.health === 0){
+         this.isAlive = false;
+      }
 };
+
   /**
    * @method inflictDamage
    *
@@ -135,3 +139,11 @@ Spellcaster.prototype.inflictDamage = function (number) {
    * @param  {Spellcaster} target         The spell target to be inflicted.
    * @return {boolean}                    Whether the spell was successfully cast.
    */
+// Spellcaster.prototype.invoke = function (spell, target) {
+//    if(spell){
+//       if(spell instanceof Spell){
+//          if()
+//       }
+//    }
+// }
+
